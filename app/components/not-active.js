@@ -2,17 +2,24 @@ import Ember from 'ember';
 import config from 'travis/config/environment';
 
 const { service } = Ember.inject;
+const { alias } = Ember.computed;
 
 export default Ember.Component.extend({
+  auth: service(),
   flashes: service(),
+
+  user: alias('auth.currentUser'),
 
   canActivate: function() {
     let user = this.get('user');
+    console.log('auth', this.get('auth.user'));
     if(user) {
       let permissions = user.get('pushPermissions'),
           repoId = parseInt(this.get('repo.id'));
 
       return permissions.contains(repoId);
+    } else {
+      return false;
     }
   }.property('user.pushPermissions.[]', 'repo'),
 
