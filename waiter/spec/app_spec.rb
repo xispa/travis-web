@@ -15,9 +15,9 @@ describe Travis::Web::App do
   end
 
   describe 'assets' do
-    before  { get('/favicon.ico') }
+    before  { get('/robots.txt') }
     example { last_response.should be_ok }
-    example { headers['Content-Location'].should be == '/favicon.ico' }
+    example { headers['Content-Location'].should be == '/robots.txt' }
     example { headers['Cache-Control'].should_not include('must-revalidate') }
     example { headers['Cache-Control'].should include('public') }
     example { headers['Vary'].split(',').should_not include('Accept') }
