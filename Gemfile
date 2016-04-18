@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-ruby '2.1.2'
+ruby '2.3.0'
 
 gem 'travis-web', path: 'waiter'
 gem 'puma'
@@ -8,6 +8,7 @@ gem 'rack-protection', '~> 1.3'
 gem 'rack-mobile-detect'
 gem 'sinatra'
 gem 'hashr'
+gem 'test-unit'
 
 group :development, :test do
   gem 'rake'
