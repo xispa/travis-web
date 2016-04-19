@@ -28,6 +28,15 @@ export default function() {
     return response;
   };
 
+  this.get('/users/:id', (schema, request) => {
+    console.log('mirage hit');
+    let user = schema.user.find(request.params.id);
+    if (user) {
+      console.log(user.attrs);
+      return { user: user.attrs };
+    }
+  });
+
   this.get('/repos', function(schema, request) {
     return turnIntoV3('repository', schema.repository.all());
   });
@@ -49,7 +58,6 @@ export default function() {
   });
   this.get('/jobs/:id/log', function(schema, request) {
     let log = schema.log.find(request.params.id);
-
     if(log) {
       return { log: { parts: [{ id: log.attrs.id, number: 1, content: log.attrs.content}] }};
     } else {

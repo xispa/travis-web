@@ -132,8 +132,11 @@ export default Ember.Service.extend({
     }
     if (user) {
       return this.get('ajax').get("/users/" + user.id).then( (data) => {
+        console.log(data);
         var userRecord;
+        console.log('user has incorrect scopes');
         if (data.user.correct_scopes) {
+          console.log('user has correct scopes');
           userRecord = this.loadUser(data.user);
           userRecord.get('permissions');
           if (this.get('signedIn')) {

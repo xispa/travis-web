@@ -37,10 +37,12 @@ export default Model.extend({
   }.property(),
 
   _rawPermissions: function() {
+    console.log('_rawPermissions called');
     return this.get('ajax').get('/users/permissions');
   }.property(),
 
   permissions: function() {
+    console.log('permissions called');
     var permissions;
     permissions = Ember.ArrayProxy.create({
       content: []
