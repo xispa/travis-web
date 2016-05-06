@@ -82,6 +82,10 @@ var App = Ember.Application.extend(Ember.Evented, {
 
     if (window.HS) {
       HS.beacon.ready(function() {
+        HS.beacon.config({
+          color: '#9d9d9d',
+          icon: 'message'
+        });
         HS.beacon.init();
       });  
     } else {
