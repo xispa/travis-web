@@ -82,14 +82,14 @@ var App = Ember.Application.extend(Ember.Evented, {
 
     if (window.HS) {
       HS.beacon.ready(function() {
-        HS.beacon.config({
-          autoInit: false,
-          modal: true
-        });
         HS.beacon.init();
       });  
     } else {
       initHsBeacon();
+
+      HS.beacon.config({
+        modal: true
+      });
     }
   },
 
