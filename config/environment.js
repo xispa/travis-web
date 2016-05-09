@@ -27,7 +27,9 @@ module.exports = function(environment) {
       key: '5df8ac576dcccf4fd076',
       host: 'ws.pusherapp.com'
     },
-    pro: false,
+    // FIXME disable these if/when this is merged!
+    pro: true,
+    beacon: true,
     enterprise: false,
     endpoints: {},
     intervals: { updateTimes: 1000 },
