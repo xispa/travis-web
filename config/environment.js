@@ -42,6 +42,12 @@ module.exports = function(environment) {
   }
 
   if (typeof process !== 'undefined') {
+    // Both Travis Pro and Enterprise need identical Pusher config
+    if (process.env.TRAVIS_PRO || process.env.TRAVIS_ENTERPRISE) {
+      ENV.pusher.key = '59236bc0716a551eab40';
+      ENV.pusher.channelPrefix = 'private-';
+    }
+
     if (process.env.TRAVIS_PRO && !process.env.TRAVIS_ENTERPRISE) {
       // set defaults for pro if it's used
       // TODO: we have the same defaults also in ruby process,
@@ -50,8 +56,6 @@ module.exports = function(environment) {
       //       on things set here, but I haven't tested that yet.
       ENV.pro = true;
       ENV.apiEndpoint = 'https://api.travis-ci.com';
-      ENV.pusher.key = '59236bc0716a551eab40';
-      ENV.pusher.channelPrefix = 'private-';
       ENV.pagesEndpoint = 'https://billing.travis-ci.com';
       ENV.billingEndpoint = 'https://billing.travis-ci.com';
       ENV.endpoints = {
