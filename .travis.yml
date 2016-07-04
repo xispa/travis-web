@@ -37,6 +37,8 @@ install:
   - npm install -g bower
   - npm install
   - bower install
+
+before_script:
   - "ember -v"
 
 script:
