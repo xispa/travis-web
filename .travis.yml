@@ -37,6 +37,7 @@ install:
   - npm install -g bower
   - npm install
   - bower install
+  - "ember -v"
 
 script:
   - ember try:one $EMBER_VERSION --- ember test --reporter dot
