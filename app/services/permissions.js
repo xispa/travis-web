@@ -18,9 +18,9 @@ export default Ember.Service.extend({
   all: Ember.computed('currentUser.permissions', 'currentUser.permissions.[]',
          'currentUser.pushPermissions', 'currentUser.pushPermissions.[]',
          'currentUser.adminPermissions', 'currentUser.adminPermissions.[]',
-         function() {
-            return;
-         }),
+    function() {
+      return;
+  }),
 
   hasPermission(repo) {
     return this.checkPermission(repo, 'permissions');
@@ -31,13 +31,17 @@ export default Ember.Service.extend({
   },
 
   hasAdminPermission(repo) {
+    console.log('permissions', this.get('currentUser.adminPermissions'));
     return this.checkPermission(repo, 'adminPermissions');
   },
 
   checkPermission(repo, permissionsType) {
     let id = isNaN(repo) ? repo.get('id') : repo;
     let currentUser = this.get('currentUser');
+
     if(currentUser) {
+      let arr = currentUser.get(permissionsType);
+      console.log(arr.toArray());
       return currentUser.get(permissionsType).contains(parseInt(id));
     } else {
       return false;

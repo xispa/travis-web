@@ -31,8 +31,8 @@ export default Ember.Controller.extend({
   },
 
   reloadHooks() {
-    var hooks, login;
-    if (login = this.get('model.login')) {
+    let login = this.get('model.login');
+    if (login) {
       Repo.byOwner(this.store, login).then((repos) => {
         this.set('allHooks', repos);
         this.toggleProperty('repositoriesLoaded');
@@ -45,24 +45,31 @@ export default Ember.Controller.extend({
   }.property('model.name', 'model.login'),
 
   hooks: function() {
-    var hooks;
-    if (!(hooks = this.get('allHooks'))) {
+    let hooks = this.get('allHooks');
+
+    if (!(hooks)) {
       this.reloadHooks();
     }
-    let login = this.get('accountName');
+
     let permissions = this.get('permissions');
-    return this.get('allHooks').filter(function(hook) {
-      console.log('has admin permission', permissions.hasAdminPermission(hook));
-      return permissions.hasPermission(hook);
+    let currentUser = this.get('auth.currentUser');
+
+    let filtered = this.get('allHooks').filter(function(hook) {
+      return permissions.hasAdminPermission(hook);
     });
+
+    return filtered;
   }.property('allHooks.length', 'allHooks'),
 
   hooksWithoutAdmin: function() {
-    var hooks;
-    if (!(hooks = this.get('allHooks'))) {
+    let hooks = this.get('allHooks');
+
+    if (!(hooks)) {
       this.reloadHooks();
     }
+
     let permissions = this.get('permissions');
+
     return this.get('allHooks').filter(function(hook) {
       return !permissions.hasAdminPermission(hook);
     });

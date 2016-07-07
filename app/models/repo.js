@@ -246,7 +246,6 @@ Repo.reopenClass({
           data: record
         });
       }
-      console.log(repositories);
       return repositories;
     });
   },
