@@ -17,5 +17,9 @@ export default V3Adapter.extend({
     }
 
     return this._super(url, type, hash);
+  },
+
+  byOwner(owner) {
+    return this.ajax(`${Config.apiEndpoint}/owner/${owner}/repos`, 'GET', {});
   }
 });

@@ -51,7 +51,7 @@ export default Model.extend({
       return permissions.set('content', data.permissions);
     });
     return permissions;
-  }.property(),
+  }.property('_rawPermissions'),
 
   adminPermissions: function() {
     var permissions;

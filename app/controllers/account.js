@@ -1,12 +1,15 @@
 import Ember from 'ember';
+import Repo from 'travis/models/repo';
 
 const { service } = Ember.inject;
 const { alias } = Ember.computed;
 
 export default Ember.Controller.extend({
   auth: service(),
+  permissions: service(),
   allHooks: [],
   user: alias('auth.currentUser'),
+  repositoriesLoaded: false,
 
   init() {
     var self;
@@ -30,14 +33,10 @@ export default Ember.Controller.extend({
   reloadHooks() {
     var hooks, login;
     if (login = this.get('model.login')) {
-      hooks = this.store.query('hook', {
-        all: true,
-        owner_name: login
+      Repo.byOwner(this.store, login).then((repos) => {
+        this.set('allHooks', repos);
+        this.toggleProperty('repositoriesLoaded');
       });
-      hooks.then(function() {
-        return hooks.set('isLoaded', true);
-      });
-      return this.set('allHooks', hooks);
     }
   },
 
@@ -50,8 +49,11 @@ export default Ember.Controller.extend({
     if (!(hooks = this.get('allHooks'))) {
       this.reloadHooks();
     }
+    let login = this.get('accountName');
+    let permissions = this.get('permissions');
     return this.get('allHooks').filter(function(hook) {
-      return hook.get('admin');
+      console.log('has admin permission', permissions.hasAdminPermission(hook));
+      return permissions.hasPermission(hook);
     });
   }.property('allHooks.length', 'allHooks'),
 
@@ -60,8 +62,9 @@ export default Ember.Controller.extend({
     if (!(hooks = this.get('allHooks'))) {
       this.reloadHooks();
     }
+    let permissions = this.get('permissions');
     return this.get('allHooks').filter(function(hook) {
-      return !hook.get('admin');
+      return !permissions.hasAdminPermission(hook);
     });
   }.property('allHooks.length', 'allHooks'),
 

@@ -231,6 +231,26 @@ Repo.reopenClass({
     return repos;
   },
 
+  byOwner(store, owner) {
+    let adapter = store.adapterFor('repo');
+    return adapter.byOwner(owner).then(function(payload) {
+      let serializer = store.serializerFor('repo');
+      let modelClass = store.modelFor('repo');
+      let serialized = serializer.normalizeResponse(store, modelClass, payload, null, 'findAll');
+      let repositories = store.push({
+        data: serialized.data
+      });
+      for(let i = 0, len = serialized.included.length; i < len; i++) {
+        let record = serialized.included[i];
+        let r = store.push({
+          data: record
+        });
+      }
+      console.log(repositories);
+      return repositories;
+    });
+  },
+
   fetchBySlug(store, slug) {
     var adapter, modelClass, promise, repos;
     repos = store.peekAll('repo').filterBy('slug', slug);
