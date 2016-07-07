@@ -61,6 +61,10 @@ export default function() {
     return schema.repositories.all();
   });
 
+  this.get('/owner/:login/repos', function(schema, request) {
+    return schema.repositories.all();
+  });
+
   this.get('/repo/:slug', function(schema, request) {
     let repos = schema.repositories.where({ slug: decodeURIComponent(request.params.slug) });
 
