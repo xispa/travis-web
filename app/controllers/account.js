@@ -12,12 +12,10 @@ export default Ember.Controller.extend({
   repositoriesLoaded: false,
 
   init() {
-    var self;
     this._super(...arguments);
-    self = this;
-    return Travis.on("user:synced", (function() {
-      return self.reloadHooks();
-    }));
+    return Travis.on("user:synced", () => {
+      return this.reloadHooks();
+    });
   },
 
   actions: {
@@ -52,14 +50,13 @@ export default Ember.Controller.extend({
     }
 
     let permissions = this.get('permissions');
-    let currentUser = this.get('auth.currentUser');
 
     let filtered = this.get('allHooks').filter(function(hook) {
-      return permissions.hasAdminPermission(hook);
+      return hook.get('toggleable');
     });
 
     return filtered;
-  }.property('allHooks.length', 'allHooks'),
+  }.property('allHooks.[]'),
 
   hooksWithoutAdmin: function() {
     let hooks = this.get('allHooks');
@@ -68,12 +65,10 @@ export default Ember.Controller.extend({
       this.reloadHooks();
     }
 
-    let permissions = this.get('permissions');
-
     return this.get('allHooks').filter(function(hook) {
-      return !permissions.hasAdminPermission(hook);
+      return !hook.get('toggleable');
     });
-  }.property('allHooks.length', 'allHooks'),
+  }.property('allHooks.[]'),
 
   showPrivateReposHint: function() {
     return this.config.show_repos_hint === 'private';

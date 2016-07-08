@@ -41,7 +41,6 @@ export default Ember.Service.extend({
 
     if(currentUser) {
       let arr = currentUser.get(permissionsType);
-      console.log(arr.toArray());
       return currentUser.get(permissionsType).contains(parseInt(id));
     } else {
       return false;

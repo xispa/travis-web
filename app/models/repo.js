@@ -27,6 +27,9 @@ Repo.reopen({
   "private": attr('boolean'),
   githubLanguage: attr(),
   active: attr(),
+  permissions: attr(),
+
+  toggleable: Ember.computed.and('permissions.enable', 'permissions.disable'),
 
   withLastBuild() {
     return this.filter(function(repo) {
