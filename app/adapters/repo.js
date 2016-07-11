@@ -10,10 +10,12 @@ export default V3Adapter.extend({
       hash.data = {};
     }
 
-    if(hash.data.include) {
-      hash.data.include += ',build.branch,repository.default_branch,repository.current_build,build.commit';
-    } else {
-      hash.data.include = 'build.branch,repository.default_branch,repository.current_build,build.commit';
+    if (type === 'GET') {
+      if(hash.data.include) {
+        hash.data.include += ',build.branch,repository.default_branch,repository.current_build,build.commit';
+      } else {
+        hash.data.include = 'build.branch,repository.default_branch,repository.current_build,build.commit';
+      }
     }
 
     return this._super(url, type, hash);
