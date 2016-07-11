@@ -9,16 +9,6 @@ export default function() {
     return { accounts: users.concat(accounts) };
   });
 
-  this.get('/hooks', function({hooks}, {queryParams: {owner_name}}) {
-    return this.serialize(hooks.where({owner_name}), 'v2');
-  });
-
-  this.put('/hooks/:id', (schema, request) => {
-    const user = schema.hooks.find(request.params.id);
-    server.create('repository', { id: request.params.id });
-    return user.update(JSON.parse(request.requestBody).hook);
-  });
-
   this.get('/users/:id', function({users}, request) {
     if(request.requestHeaders.Authorization === 'token testUserToken') {
       return this.serialize(users.find(request.params.id), 'v2');
