@@ -23,5 +23,13 @@ export default V3Adapter.extend({
 
   byOwner(owner) {
     return this.ajax(`${Config.apiEndpoint}/owner/${owner}/repos`, 'GET', {});
+  },
+
+  enable(id) {
+    return this.ajax(`${Config.apiEndpoint}/repo/${id}/enable`, 'POST');
+  },
+
+  disable(id) {
+    return this.ajax(`${Config.apiEndpoint}/repo/${id}/disable`, 'POST');
   }
 });

@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import TravisRoute from 'travis/routes/basic';
 import Repo from 'travis/models/repo';
 

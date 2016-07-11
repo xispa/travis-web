@@ -19,31 +19,44 @@ moduleForAcceptance('Acceptance | profile', {
       repos_count: 30
     });
 
-    const activeHook = server.create('hook', {
-      name: 'living-a-feminist-life',
-      owner_name: 'feministkilljoy',
+    const activeHook = server.create('repository', {
+      slug: 'feministkilljoy/living-a-feminist-life',
+      owner: 'feministkilljoy',
       active: true,
-      admin: true
+      permissions: {
+        enable: true,
+        disable: true
+      }
     });
 
-    const inactiveHook = server.create('hook', {
-      name: 'willful-subjects',
-      owner_name: 'feministkilljoy',
+    const inactiveHook = server.create('repository', {
+      slug: 'feministkilljoy/willful-subjects',
+      owner: 'feministkilljoy',
       active: false,
-      admin: true
+      permissions: {
+        enable: true,
+        disable: true
+      }
     });
 
-    const unadministerableHook = server.create('hook', {
-      name: 'affect-theory-reader',
-      owner_name: 'feministkilljoy',
+    const unadministerableHook = server.create('repository', {
+      slug: 'feministkilljoy/affect-theory-reader',
+      owner: 'feministkilljoy',
       active: true,
-      admin: false
+      permissions: {
+        enable: false,
+        disable: false
+      }
     });
 
-    const otherHook = server.create('hook', {
-      name: 'feminism-is-for-everybody',
-      owner_name: 'bellhooks',
-      active: false
+    const otherHook = server.create('repository', {
+      slug: 'bellhooks/feminism-is-for-everybody',
+      owner: 'bellhooks',
+      active: false,
+      permissions: {
+        enable: false,
+        disable: false
+      }
     });
   }
 });
@@ -62,15 +75,15 @@ test('view profile', function(assert) {
     assert.equal(profilePage.accounts(1).name, 'Feminist Killjoys');
     assert.equal(profilePage.accounts(1).repositoryCount, 30);
 
-    assert.equal(profilePage.administerableHooks().count, 2, 'expected two administerable hooks');
+    assert.equal(profilePage.administerableRepos().count, 2, 'expected two administerable hooks');
 
-    assert.equal(profilePage.administerableHooks(0).name, 'feministkilljoy/living-a-feminist-life');
-    assert.ok(profilePage.administerableHooks(0).isActive, 'expected active hook to appear active');
+    assert.equal(profilePage.administerableRepos(0).name, 'feministkilljoy/living-a-feminist-life');
+    assert.ok(profilePage.administerableRepos(0).isActive, 'expected active hook to appear active');
 
-    assert.equal(profilePage.administerableHooks(1).name, 'feministkilljoy/willful-subjects');
-    assert.notOk(profilePage.administerableHooks(1).isActive, 'expected inactive hook to appear inactive');
+    assert.equal(profilePage.administerableRepos(1).name, 'feministkilljoy/willful-subjects');
+    assert.notOk(profilePage.administerableRepos(1).isActive, 'expected inactive hook to appear inactive');
 
-    assert.equal(profilePage.unadministerableHooks().count, 1, 'expected one unadministerable hook');
+    assert.equal(profilePage.unadministerableRepos().count, 1, 'expected one unadministerable hook');
   });
 });
 
@@ -91,13 +104,13 @@ test('view token', function(assert) {
 test('updating hooks', function(assert) {
   profilePage.visit({username: 'feministkilljoy'});
 
-  profilePage.administerableHooks(0).toggle();
-  profilePage.administerableHooks(1).toggle();
-  profilePage.unadministerableHooks(0).toggle();
+  profilePage.administerableRepos(0).toggle();
+  profilePage.administerableRepos(1).toggle();
+  profilePage.unadministerableRepos(0).toggle();
 
   andThen(() => {
-    assert.notOk(server.db.hooks[0].active, 'expected formerly active hook to be inactive');
-    assert.ok(server.db.hooks[1].active, 'expected formerly inactive hook to be active');
-    assert.ok(server.db.hooks[2].active, 'expected unadministerable hook to be unchanged');
+    assert.notOk(server.db.repositories[0].active, 'expected formerly active hook to be inactive');
+    assert.ok(server.db.repositories[1].active, 'expected formerly inactive hook to be active');
+    assert.ok(server.db.repositories[2].active, 'expected unadministerable hook to be unchanged');
   });
 });

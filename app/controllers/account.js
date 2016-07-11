@@ -7,7 +7,6 @@ const { alias } = Ember.computed;
 export default Ember.Controller.extend({
   auth: service(),
   permissions: service(),
-  allRepositories: [],
   user: alias('auth.currentUser'),
 
   actions: {
@@ -15,8 +14,8 @@ export default Ember.Controller.extend({
       return this.get('user').sync();
     },
 
-    toggle(hook) {
-      return hook.toggle();
+    toggle(repo) {
+      return repo.toggle();
     }
   },
 

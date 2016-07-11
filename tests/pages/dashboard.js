@@ -7,8 +7,7 @@ import {
 } from 'ember-cli-page-object';
 
 export default create({
-  visit: visitable('/'),
-  navigateToProfilePage: clickable('#profile-page-link'),
+  visit: visitable('/profile/testuser'),
   sidebarRepositories: collection({
     scope: 'ul.repos-list',
     itemScope: 'li.repo',

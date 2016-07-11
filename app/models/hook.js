@@ -27,37 +27,4 @@ export default Model.extend({
   urlGithubAdmin: function() {
     return config.sourceEndpoint + "/" + (this.get('slug')) + "/settings/hooks#travis_minibucket";
   }.property(),
-
-  toggle() {
-    if (this.get('isSaving')) {
-      return;
-    }
-    this.toggleProperty('active');
-    return this.save().then((record) => {
-      this.updateRepositoryStatus();
-      return record;
-    });
-  },
-
-  updateRepositoryStatus() {
-    Ember.run(this, () => {
-      if (this.get('active')) {
-        return this.get('store').push({
-          data: {
-            id: this.get('id'),
-            type: 'repo',
-            attributes: {
-              active: true,
-              slug: `${this.get('ownerName')}/${this.get('name')}`
-            }
-          }
-        });
-      } else {
-        let record = this.get('store').peekRecord('repo', this.get('id'));
-        if (record) {
-          return this.get('store').unloadRecord(record);
-        }
-      }
-    });
-  }
 });

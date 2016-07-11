@@ -17,10 +17,12 @@ var Serializer = V2FallbackSerializer.extend(EmbeddedRecordsMixin, {
       id = payload.id;
     }
 
-    payload.repositories = payload.repositories.map((repo) => {
-      repo.permissions = repo["@permissions"];
-      return repo;
-    });
+    if (payload.repositories) {
+      payload.repositories = payload.repositories.map((repo) => {
+        repo.permissions = repo["@permissions"];
+        return repo;
+      });
+    }
 
     return this._super(store, primaryModelClass, payload, id, requestType);
   },

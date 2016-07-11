@@ -31,10 +31,36 @@ Repo.reopen({
 
   toggleable: Ember.computed.and('permissions.enable', 'permissions.disable'),
 
+  toggle() {
+    if (this.get('isSaving')) {
+      return;
+    }
+    this.toggleProperty('active');
+    if (this.get('active')) {
+      return this.enable(this.get('id')).then((record) => {
+        return record;
+      });
+    } else {
+      return this.disable(this.get('id')).then((record) => {
+        return record;
+      });
+    }
+  },
+
   withLastBuild() {
     return this.filter(function(repo) {
       return repo.get('lastBuildId');
     });
+  },
+
+  enable(id) {
+    let adapter = this.store.adapterFor('repo');
+    return adapter.enable(id);
+  },
+
+  disable(id) {
+    let adapter = this.store.adapterFor('repo');
+    return adapter.disable(id);
   },
 
   sshKey: function() {

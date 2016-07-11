@@ -62,7 +62,7 @@ export default function() {
   });
 
   this.get('/owner/:login/repos', function(schema, request) {
-    return schema.repositories.all();
+    return schema.repositories.where({owner: request.params.login});
   });
 
   this.get('/repo/:slug', function(schema, request) {
@@ -71,6 +71,26 @@ export default function() {
     return {
       repo: repos.models[0].attrs
     };
+  });
+
+  this.post('/repo/:repository_id/enable', function(schema, request) {
+    let repo = schema.repositories.find(request.params.repository_id);
+    if (repo) {
+      repo.update('active', true);
+      return repo;
+    } else {
+      return new Mirage.Response(404, {}, {});
+    }
+  });
+
+  this.post('/repo/:repository_id/disable', function(schema, request) {
+    let repo = schema.repositories.find(request.params.repository_id);
+    if (repo) {
+      repo.update('active', false);
+      return repo;
+    } else {
+      return new Mirage.Response(404, {}, {});
+    }
   });
 
   this.get('/v3/repo/:id/crons', function(schema, request) {
