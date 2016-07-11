@@ -210,7 +210,10 @@ export default Ember.Service.extend({
     if (endpoint[0] === '/') {
       return this.receivingEnd;
     } else {
-      return endpoint.match(/^https?:\/\/[^\/]*/)[0];
+      let matches = endpoint.match(/^https?:\/\/[^\/]*/);
+      if (matches) {
+        return matches[0];
+      }
     }
   },
 
