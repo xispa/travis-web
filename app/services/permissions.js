@@ -10,6 +10,8 @@ export default Ember.Service.extend({
     return this._super(...arguments);
   },
 
+  havePermissionsData: false,
+
   currentUser: Ember.computed.alias('auth.currentUser'),
 
   // This is computed property that can be used to allow any properties that
@@ -31,7 +33,6 @@ export default Ember.Service.extend({
   },
 
   hasAdminPermission(repo) {
-    console.log('permissions', this.get('currentUser.adminPermissions'));
     return this.checkPermission(repo, 'adminPermissions');
   },
 

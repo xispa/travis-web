@@ -1,22 +1,36 @@
 import TravisRoute from 'travis/routes/basic';
+import Repo from 'travis/models/repo';
 
 export default TravisRoute.extend({
   titleToken(model) {
-    if (model) {
-      return model.get('name') || model.get('login');
+    let { account } = model;
+    if (account) {
+      return account.get('name') || account.get('login');
     } else {
       return 'Account';
     }
   },
 
-  setupController(controller, account) {
-    this._super(...arguments);
-    return this.controllerFor('profile').activate('hooks');
+  model(params) {
+    return Ember.RSVP.hash({
+      account: this.fetchAccount(params.login),
+      repositories: Repo.byOwner(this.store, params.login)
+    });
   },
 
-  model(params) {
+  actions: {
+    loading(transition, originRoute) {
+      let controller = this.controllerFor('account');
+      controller.set('loadingRepositoryData', true);
+      transition.promise.finally(() => {
+        controller.set('loadingRepositoryData', false);
+      });
+    }
+  },
+
+  fetchAccount(login) {
     return this.modelFor('accounts').find(function(account) {
-      return account.get('login') === params.login;
+      return account.get('login') === login;
     });
   },
 

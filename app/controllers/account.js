@@ -7,16 +7,8 @@ const { alias } = Ember.computed;
 export default Ember.Controller.extend({
   auth: service(),
   permissions: service(),
-  allHooks: [],
+  allRepositories: [],
   user: alias('auth.currentUser'),
-  repositoriesLoaded: false,
-
-  init() {
-    this._super(...arguments);
-    return Travis.on("user:synced", () => {
-      return this.reloadHooks();
-    });
-  },
 
   actions: {
     sync() {
@@ -28,47 +20,23 @@ export default Ember.Controller.extend({
     }
   },
 
-  reloadHooks() {
-    let login = this.get('model.login');
-    if (login) {
-      Repo.byOwner(this.store, login).then((repos) => {
-        this.set('allHooks', repos);
-        this.toggleProperty('repositoriesLoaded');
-      });
-    }
-  },
+  account: Ember.computed.alias('model.account'),
 
   accountName: function() {
-    return this.get('model.name') || this.get('model.login');
-  }.property('model.name', 'model.login'),
+    return this.get('account.name') || this.get('account.login');
+  }.property('account.name', 'account.login'),
 
-  hooks: function() {
-    let hooks = this.get('allHooks');
-
-    if (!(hooks)) {
-      this.reloadHooks();
-    }
-
-    let permissions = this.get('permissions');
-
-    let filtered = this.get('allHooks').filter(function(hook) {
-      return hook.get('toggleable');
+  repositories: Ember.computed('model.repositories.[]', function() {
+    return this.get('model.repositories').filter((repo) => {
+      return repo.get('toggleable');
     });
+  }),
 
-    return filtered;
-  }.property('allHooks.[]'),
-
-  hooksWithoutAdmin: function() {
-    let hooks = this.get('allHooks');
-
-    if (!(hooks)) {
-      this.reloadHooks();
-    }
-
-    return this.get('allHooks').filter(function(hook) {
-      return !hook.get('toggleable');
+  repositoriesWithoutAdmin: Ember.computed('model.repositories.[]', function() {
+    return this.get('model.repositories').filter((repo) => {
+      return !repo.get('toggleable');
     });
-  }.property('allHooks.[]'),
+  }),
 
   showPrivateReposHint: function() {
     return this.config.show_repos_hint === 'private';
@@ -80,15 +48,15 @@ export default Ember.Controller.extend({
 
   billingUrl: function() {
     var id;
-    id = this.get('model.type') === 'user' ? 'user' : this.get('model.login');
+    id = this.get('account.type') === 'user' ? 'user' : this.get('account.login');
     return this.config.billingEndpoint + "/subscriptions/" + id;
-  }.property('model.name', 'model.login'),
+  }.property('account.name', 'account.login'),
 
   subscribeButtonInfo: function() {
     return {
       billingUrl: this.get('billingUrl'),
-      subscribed: this.get('model.subscribed'),
-      education: this.get('model.education')
+      subscribed: this.get('account.subscribed'),
+      education: this.get('account.education')
     };
-  }.property('model.login', 'model.type')
+  }.property('account.login', 'account.type')
 });

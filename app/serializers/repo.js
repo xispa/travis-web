@@ -22,8 +22,6 @@ var Serializer = V2FallbackSerializer.extend(EmbeddedRecordsMixin, {
       return repo;
     });
 
-    console.log('normalized payload', payload);
-
     return this._super(store, primaryModelClass, payload, id, requestType);
   },
 

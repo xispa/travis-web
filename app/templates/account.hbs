@@ -1,4 +1,6 @@
-{{#if repositoriesLoaded}}
+{{#if loadingRepositoryData}}
+  {{loading-indicator}}
+{{else}}
 
 <header>
   {{#unless config.enterprise}}
@@ -58,11 +60,11 @@
 
   <div id="administerable-hooks">
     <ul class="profile-hooklist">
-      {{#each hooks as |repo|}}
+      {{#each repositories as |repo|}}
         {{repository-status-toggle repo=repo}}
       {{else}}
         <li>
-          {{#if hooksWithoutAdmin.length}}
+          {{#if repositoriesWithoutAdmin.length}}
             Sorry, but we can't find any repositories you have admin access to.
           {{else}}
             Sorry, it seems like we couldn't find any repositories you have access to on GitHub.
@@ -72,12 +74,12 @@
     </ul>
   </div>
 
-  {{#if hooksWithoutAdmin.length}}
+  {{#if repositoriesWithoutAdmin.length}}
     <div id="unadministerable-hooks">
       <p>You require admin rights to enable these repositories</p>
 
       <ul class="profile-hooklist">
-        {{#each hooksWithoutAdmin as |repo| }}
+        {{#each repositoriesWithoutAdmin as |repo| }}
           <li class="{{if repo.active 'active'}} row">
             <div class="switch--icon inline-block disabled {{if repo.active 'active'}}">
               <div class="switch-inner">
@@ -98,7 +100,4 @@
       </ul>
     </div>
   {{/if}}
-
-{{else}}
-  {{loading-indicator}}
 {{/if}}

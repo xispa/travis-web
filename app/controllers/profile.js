@@ -16,11 +16,6 @@ export default Ember.Controller.extend({
     return this[("view_" + action).camelize()]();
   },
 
-  viewHooks() {
-    this.connectTab('hooks');
-    return this.get('accountController').reloadHooks();
-  },
-
   viewUser() {
     return this.connectTab('user');
   },
