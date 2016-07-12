@@ -88,7 +88,7 @@ export default Model.extend({
 
   pushPermissionsPromise: function() {
     return this.get('_rawPermissions').then((data) => {
-      return data.pull;
+      return data.push;
     });
   }.property(),
 
