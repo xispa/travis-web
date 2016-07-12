@@ -22,10 +22,11 @@ moduleForAcceptance('Acceptance | repo settings', {
     const repository = server.create('repository', {
       name: 'living-a-feminist-life',
       slug: 'killjoys/living-a-feminist-life',
+      owner: 'killjoys',
 
-      // FIXME figure out how to define this more cleanly
-      "@permissions": {
-        "create_cron": true
+      permissions: {
+        create_cron: true,
+        push: true
       }
     });
 

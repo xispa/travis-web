@@ -25,12 +25,8 @@ export default TravisRoute.extend({
     var repo = this.modelFor('repo');
     var apiEndpoint = config.apiEndpoint;
 
-    return $.ajax(apiEndpoint + "/v3/repo/" + repo.get('id'), {
-      headers: {
-        Authorization: 'token ' + this.auth.token()
-      }
-    }).then(function(response) {
-      if(response["@permissions"]["create_cron"]) {
+    return this.store.find('repo', repo.get('id')).then((repo) => {
+      if(repo.get('permissions.create_cron')) {
         return Ember.Object.create({
           enabled: true,
           jobs: repo.get('cronJobs')
@@ -42,7 +38,6 @@ export default TravisRoute.extend({
         });
       }
     });
-
   },
 
   fetchBranches() {
@@ -90,13 +85,7 @@ export default TravisRoute.extend({
   },
 
   hasPushAccess() {
-    var repoId;
-    repoId = parseInt(this.modelFor('repo').get('id'));
-    return this.auth.get('currentUser').get('pushPermissionsPromise').then(function(permissions) {
-      return permissions.filter(function(item) {
-        return item === repoId;
-      });
-    });
+    return this.modelFor('repo').get('permissions.push');
   },
 
   model() {

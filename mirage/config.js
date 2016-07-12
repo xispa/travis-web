@@ -55,12 +55,18 @@ export default function() {
     return schema.repositories.where({owner: request.params.login});
   });
 
-  this.get('/repo/:slug', function(schema, request) {
-    let repos = schema.repositories.where({ slug: decodeURIComponent(request.params.slug) });
+  this.get('/repo/:slug_or_id', function(schema, request) {
+    let slugOrId = decodeURIComponent(request.params.slug_or_id);
+    let isId = parseInt(slugOrId);
+    if (isId) {
+      return schema.repositories.find(slugOrId);
+    } else {
+      let repos = schema.repositories.where({ slug: slugOrId });
 
-    return {
-      repo: repos.models[0].attrs
-    };
+      return {
+        repo: repos.models[0].attrs
+      };
+    }
   });
 
   this.post('/repo/:repository_id/enable', function(schema, request) {

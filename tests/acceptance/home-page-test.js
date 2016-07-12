@@ -27,16 +27,13 @@ moduleForAcceptance('Acceptance | home page for user with repositories', {
     signInUser(currentUser);
 
     const livingAFeministLife = server.create('repository', {
-      slug: 'killjoys/living-a-feminist-life'
+      slug: 'killjoys/living-a-feminist-life',
+      owner: 'feministkilljoy'
     });
 
     const willfulSubjects = server.create('repository', {
-      slug: 'killjoys/willful-subjects'
-    });
-
-    server.create('repository', {
-      slug: 'other/other',
-      skipPermissions: true
+      slug: 'killjoys/willful-subjects',
+      owner: 'feministkilljoy'
     });
   }
 });

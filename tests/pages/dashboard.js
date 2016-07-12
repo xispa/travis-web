@@ -7,7 +7,7 @@ import {
 } from 'ember-cli-page-object';
 
 export default create({
-  visit: visitable('/profile/testuser'),
+  visit: visitable('/'),
   sidebarRepositories: collection({
     scope: 'ul.repos-list',
     itemScope: 'li.repo',
