@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   store: service(),
   runOnlyWhenNewCommit: Ember.computed('cron.run_only_when_new_commit', function () {
     if (this.get('cron.run_only_when_new_commit')) {
-      return 'Only if there is a new commit';
+      return 'Do not run if there has been a build in the last 24h';
     } else {
       return 'Always run';
     }
